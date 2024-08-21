@@ -15,4 +15,9 @@ class Answer extends Model
     {
         return $this->belongsTo(Vote::class);
     }
+
+    public function question()
+    {
+        return $this->belongsTo(Question::class);
+    }
 }

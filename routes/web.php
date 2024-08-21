@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\User\QuestionController;
 use App\Http\Controllers\ElectionController;
 
@@ -17,7 +18,9 @@ use App\Http\Controllers\ElectionController;
 |
 */
 
-Route::redirect('/', '/dashboard');
+Route::controller(IndexController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -44,6 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/election/update', 'update')->name('election.update');
             Route::post('/election/delete', 'destroy')->name('election.destroy');
             Route::get('/election/{id}/detail','detail')->name('election.detail');
+            Route::get('/election/{id}/view-results','view_results')->name('election.view_results');
 
 
             Route::get('/election/{id}/add-question', 'addQuestion')->name('election.addQuestion');

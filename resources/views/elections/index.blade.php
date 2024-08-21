@@ -19,6 +19,7 @@
                                         <th>Start Date</th>
                                         <th>End Date</th>
                                         <th>Type</th>
+                                        <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -38,8 +39,18 @@
                                             </ul>
                                         </td>
                                         <td>
+                                            @if($election->end_date < date('Y-m-d H:i:s'))
+                                                <span class="badge badge-danger">Ended</span>
+                                            @else
+                                                <span class="badge badge-success">Active</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <a href="{{ route('election.addQuestion', $election->id) }}" class="btn btn-success btn-sm">
                                                 <i class="fas fa-plus-circle"></i> Add Question
+                                            </a>
+                                            <a href="{{ route('election.view_results', $election->id) }}" class="btn btn-secondary btn-sm">
+                                                <i class="fas fa-plus-circle"></i> View Results
                                             </a>
                                             <a href="{{ route('election.detail', $election->id) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-info-circle"></i>

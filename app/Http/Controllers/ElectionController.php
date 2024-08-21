@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{User,Election};
+use App\Models\{User,Election,Vote};
 use App\Models\Question;
 use App\Models\QuestionOption;
 use Illuminate\Support\Facades\Auth;
@@ -209,5 +209,17 @@ class ElectionController extends Controller
         $question = Question::findOrFail($request->id);
         $question->delete();
         return back()->with('success', 'Question deleted successfully.');
+    }
+
+    public function view_results($id)
+    {
+        $election = Election::with('questions.answers.vote.user')->findOrFail($id);
+
+        $votes = Vote::with(['user', 'answers.question'])
+            ->where('election_id', $id)
+            ->Orderby('id','DESC')
+            ->get();
+
+        return view('elections.view_result')->with(compact('election','votes'));
     }
 }

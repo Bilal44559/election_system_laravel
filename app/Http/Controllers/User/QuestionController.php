@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\{User,Election,Vote,Answer,Question};
+use App\Mail\VoteConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 class QuestionController extends Controller
 {
@@ -70,7 +72,7 @@ class QuestionController extends Controller
                 }
             }
         }
-
+        Mail::to(auth()->user()->email)->send(new VoteConfirmation($vote));
         return to_route('user.elections')->with('success', 'Your vote has been submitted successfully!');
     }
 
