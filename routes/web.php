@@ -20,6 +20,7 @@ use App\Http\Controllers\ElectionController;
 
 Route::controller(IndexController::class)->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/election/{slug}', 'election_page')->name('election_page');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::get('/election/{id}/add-question', 'addQuestion')->name('election.addQuestion');
             Route::post('/election/store-question', 'questionStore')->name('election.questionStore');
+            Route::post('/election/question-status', 'questionStatus')->name('election.questionStatus');
             Route::get('/election/{election_id}/edit-question/{question_id}', 'editQuestion')->name('election.editQuestion');
             Route::post('/election/update-question', 'updateQuestion')->name('election.updateQuestion');
             Route::post('/election/delete-question', 'questionDestroy')->name('election.questionDestroy');

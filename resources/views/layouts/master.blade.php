@@ -21,6 +21,8 @@
     <link href="{{ asset('assets') }}/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.min.css" rel="stylesheet" />
+    <link href="{{ asset('assets') }}/css/custom-toggle.css" rel="stylesheet">
+
     <style>
         .select2-selection{
             height: 40px;
@@ -128,6 +130,29 @@
         </form>
     </div>
 
+    <div class="modal fade statusModal" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <form action="" method="POST" class="statusModalForm">
+            @csrf
+            <input type="hidden" name="id" id="statusInputID">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Status</h5>
+                        {{-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button> --}}
+                    </div>
+                    <div class="modal-body">Do you really want to change the status?</div>
+                    <div class="modal-footer">
+                        <a href="" class="btn btn-secondary" type="button">Cancel</a>
+                        <button class="btn btn-success" type="submit">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets') }}/vendor/jquery/jquery.min.js"></script>
     <script src="{{ asset('assets') }}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -147,6 +172,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $('.select2-multiple').select2();
@@ -159,6 +185,14 @@
                 $("#deleteInputID").val(id);
                 $(".deleteModalForm").attr("action", route);
                 $(".deleteModal").modal("show");
+            });
+
+            $(".statusBtn").click(function(){
+                var id = $(this).data('id');
+                var route = $(this).data('route');
+                $("#statusInputID").val(id);
+                $(".statusModalForm").attr("action", route);
+                $(".statusModal").modal("show");
             });
 
             $(".deleteAccountModalOpenBtn").click(function(){

@@ -19,7 +19,7 @@ class QuestionController extends Controller
     public function vote_form($id)
     {
         $election = Election::findOrFail($id);
-        $questions = $election->questions;
+        $questions = $election->questions->where('is_active','1');
 
         $formattedQuestions = $questions->map(function ($question) {
             return [

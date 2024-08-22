@@ -28,7 +28,7 @@
                                     @foreach($elections as $election)
                                     <tr>
                                         <td>{{ $election->title }}</td>
-                                        <td>{{ $election->description }}</td>
+                                        <td>{{ substr($election->description, 0, 100) }}</td>
                                         <td>{{ $election->start_date }}</td>
                                         <td>{{ $election->end_date }}</td>
                                         <td>

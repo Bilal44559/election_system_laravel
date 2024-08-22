@@ -10,7 +10,7 @@ class IndexController extends Controller
     public function index()
     {
         $elections = Election::with(['questions.answers.vote'])
-        ->where('end_date','>',date('Y-m-d H:i:s'))
+        ->where('end_date','<',date('Y-m-d H:i:s'))
         ->OrderBy('id','DESC')
         ->get();
 
@@ -32,5 +32,11 @@ class IndexController extends Controller
         });
 
         return view('web.index', compact('chartData'));
+    }
+
+    public function election_page($slug)
+    {
+        $election = Election::with(['questions'])->where('slug',$slug)->first();
+        return view('web.election_page', compact('election'));
     }
 }

@@ -62,6 +62,7 @@
                                     <th>Options</th>
                                     <th>Range Min</th>
                                     <th>Range Max</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -106,6 +107,13 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <div class="switch mt-3">
+                                            <button type="button" data-id="{{ $question->id }}" data-route={{ route('election.questionStatus') }} class="btn btn-sm btn-toggle statusBtn {{ $question->is_active == "1" ? 'active' : '' }}" data-toggle="button" aria-pressed="{{ $question->is_active == "1" ? 'true' : '' }}" autocomplete="off">
+                                              <div class="handle"></div>
+                                            </button>
+                                          </div>
+                                    </td>
+                                    <td>
                                         <a href="{{ route('election.editQuestion', ['election_id' => $election->id, 'question_id' => $question->id]) }}" class="btn btn-warning btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -117,7 +125,7 @@
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="7" class="text-center">No questions found.</td>
+                                    <td colspan="8" class="text-center">No questions found.</td>
                                 </tr>
                                 @endif
                             </tbody>

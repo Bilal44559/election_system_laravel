@@ -8,6 +8,8 @@ use App\Models\Question;
 use App\Models\QuestionOption;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Events\QuestionActivated;
+use Illuminate\Support\Str;
 
 class ElectionController extends Controller
 {
@@ -35,6 +37,13 @@ class ElectionController extends Controller
             'candidates' => 'required|array',
             'candidates.*' => 'exists:users,id'
         ]);
+        $slug = Str::slug($request->title, '-');
+        $originalSlug = $slug;
+        $counter = 1;
+        while (Election::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
 
         $election = Election::create([
             'user_id' => auth()->user()->id,
@@ -43,6 +52,7 @@ class ElectionController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'type' => implode(",",$request->type),
+            'slug' => $slug
         ]);
 
         $election->candidates()->attach($request->candidates);
@@ -73,9 +83,21 @@ class ElectionController extends Controller
         ]);
 
         $election = Election::findOrFail($request->id);
+        if ($election->title !== $request->title) {
+            $slug = Str::slug($request->title, '-');
+            $originalSlug = $slug;
+            $counter = 1;
+            while (Election::where('slug', $slug)->where('id', '!=', $election->id)->exists()) {
+                $slug = $originalSlug . '-' . $counter;
+                $counter++;
+            }
+        } else {
+            $slug = $election->slug;
+        }
 
         $election->update([
             'title' => $request->title,
+            'slug' => $slug,
             'description' => $request->description,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
@@ -110,6 +132,18 @@ class ElectionController extends Controller
         return view('elections.questions.add-question')->with(compact('id','election','questions'));
     }
 
+    public function questionStatus(Request $request)
+    {
+        $question = Question::findOrFail($request->id);
+        $question->is_active = $question->is_active == '1' ? '0' : '1';
+        $question->save();
+        // Broadcast the event
+        event(new QuestionActivated($question));
+
+
+        return back()->with('success', 'Question status changed successfully.');
+    }
+
     public function questionStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -131,7 +165,7 @@ class ElectionController extends Controller
             'type' => $request->question_type,
             'range_min' => $request->question_type === 'range' ? $request->range_min : null,
             'range_max' => $request->question_type === 'range' ? $request->range_max : null,
-            'is_active' => '1',
+            'is_active' => '0',
         ]);
 
         if (in_array($request->question_type, ['radio', 'checkbox'])) {

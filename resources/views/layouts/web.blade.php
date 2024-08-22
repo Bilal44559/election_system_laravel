@@ -39,7 +39,9 @@
 
             <!-- Main Content -->
             <div id="content">
-
+                <!-- Topbar -->
+                @include('layouts.web_header')
+                <!-- End of Topbar -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     @yield('content')

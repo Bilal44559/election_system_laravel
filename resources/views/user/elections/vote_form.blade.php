@@ -34,6 +34,7 @@
 @endsection
 
 @section('script')
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
     $(document).ready(function () {
     const formSteps = $('#form-steps');
@@ -174,6 +175,17 @@
     });
 
     renderStep(currentStep); // Initialize form with the first question
+    Pusher.logToConsole = true; // For debugging purposes
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
+    });
+
+    var channel = pusher.subscribe('question-channel');
+    channel.bind('App\\Events\\QuestionActivated', function(data) {
+        // const question = data.question;
+        // questions.push(question);
+        // renderStep(currentStep);
+    });
 });
 
 
