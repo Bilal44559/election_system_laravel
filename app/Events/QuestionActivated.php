@@ -20,7 +20,16 @@ class QuestionActivated implements ShouldBroadcast
      */
     public function __construct($question)
     {
-        $this->question = $question;
+        // $this->question = $question;
+        $this->question = [
+            'id' => $question->id,
+            'text' => $question->question,
+            'type' => $question->type,
+            'options' => $question->options->pluck('option')->toArray(),
+            'range_min' => $question->range_min,
+            'range_max' => $question->range_max,
+            'is_active' => $question->is_active
+        ];
     }
 
     /**

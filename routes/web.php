@@ -20,7 +20,7 @@ use App\Http\Controllers\ElectionController;
 
 Route::controller(IndexController::class)->group(function () {
     Route::get('/', 'index')->name('index');
-    Route::get('/election/{slug}', 'election_page')->name('election_page');
+    Route::get('/e/{slug}', 'election_page')->name('election_page');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

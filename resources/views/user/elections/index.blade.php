@@ -19,7 +19,7 @@
                                             <strong>Start Date:</strong> {{ $election->start_date }}<br>
                                             <strong>End Date:</strong> {{ $election->end_date }}
                                         </p>
-                                        @if(count($election->questions->where('is_active','1')) == 0 || count($election->questions->where('is_active','0')) == 0)
+                                        @if(count($election->questions->where('is_active','1')) == 0)
                                             <p class="text-danger">There are no questions for this election yet.</p>
                                         @else
 

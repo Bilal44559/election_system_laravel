@@ -38,7 +38,7 @@
 <script>
     $(document).ready(function () {
     const formSteps = $('#form-steps');
-    const questions = @json($questions); // Pass questions from controller
+    let questions = @json($questions); // Pass questions from controller
     let currentStep = 0;
 
     // Object to store answers
@@ -182,9 +182,19 @@
 
     var channel = pusher.subscribe('question-channel');
     channel.bind('App\\Events\\QuestionActivated', function(data) {
-        // const question = data.question;
-        // questions.push(question);
-        // renderStep(currentStep);
+
+        const question = data.question;
+        if (question.is_active == 1) {
+            questions.push(question);
+            renderStep(currentStep);
+        } else {
+            const filteredQuestions = questions.filter(q => q.id !== question.id);
+            if (questions[currentStep] && questions[currentStep].id === question.id) {
+                currentStep = Math.max(currentStep - 1, 0);
+            }
+            questions = filteredQuestions;
+            renderStep(currentStep);
+        }
     });
 });
 

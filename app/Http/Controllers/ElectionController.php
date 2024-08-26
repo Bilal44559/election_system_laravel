@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Events\QuestionActivated;
 use Illuminate\Support\Str;
+use App\Mail\ElectionAnnouncementMail;
+use Illuminate\Support\Facades\Mail;
 
 class ElectionController extends Controller
 {
@@ -56,6 +58,12 @@ class ElectionController extends Controller
         ]);
 
         $election->candidates()->attach($request->candidates);
+
+        // Send announcement email to all users
+        $users = User::where('type', 'user')->where('is_active','1')->get();
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new ElectionAnnouncementMail($election));
+        }
 
         return to_route('election')->with('success', 'Election created successfully.');
     }

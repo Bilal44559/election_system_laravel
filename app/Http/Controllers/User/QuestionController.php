@@ -28,7 +28,8 @@ class QuestionController extends Controller
                 'type' => $question->type,
                 'options' => $question->options->pluck('option')->toArray(),
                 'range_min' => $question->range_min,
-                'range_max' => $question->range_max
+                'range_max' => $question->range_max,
+                'is_active' => $question->is_active
             ];
         });
 

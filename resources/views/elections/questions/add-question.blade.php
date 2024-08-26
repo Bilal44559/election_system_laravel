@@ -53,7 +53,7 @@
 
                         <!-- Table to display existing questions and options -->
                         <h3 class="mt-5">Existing Questions</h3>
-                        <table class="table table-bordered table-striped mt-3">
+                        <table class="table table-bordered table-striped mt-3 table-responsive">
                             <thead>
                                 <tr>
                                     <th>SR</th>
